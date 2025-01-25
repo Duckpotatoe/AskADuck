@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Duck - Home</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Very light blue background */
+            color: black;
+        }
+
+        header, footer {
+            background-color: lightblue;
+            color: white;
+            padding: 0px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            z-index: 10;
+        }
+        
+        footer {
+            padding: 20px 20px;
+        }
+        
+        header {
+            top: 0;
+        }
+
+        footer {
+            bottom: 0;
+        }
+
+        header a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            margin: 0 50px;
+        }
+
+        header button {
+            background-color: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        footer p {
+            margin: 0;
+            color: white;
+        }
+
+        main {
+            text-align: center;
+            padding: 100px 20px 80px; /* Space for fixed header and footer */
+        }
+
+        h1, h2 {
+            margin: 20px 0;
+        }
+
+        select, input[type="text"], button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .panel {
+            margin: 20px 0;
+            display: none;
+        }
+
+        .chart {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            display: none;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: darkgray;
+            color: white;
+        }
+
+        body.dark-mode header, body.dark-mode footer {
+            background-color: darkslategray;
+        }
+
+        body.dark-mode input, body.dark-mode select, body.dark-mode button {
+            background-color: darkslategray;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <button id="darkModeToggle">🌙</button>
+        <nav>
+            <a href="C:\Users\1stdu\OneDrive\Desktop\Jacobs Folder\School\Coding\SwampHacks\AskADuckHome.html">Home</a>
+            <a href="C:\Users\1stdu\OneDrive\Desktop\Jacobs Folder\School\Coding\SwampHacks\AskADuckAbout.html">About Us       </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h1>Ask a Duck</h1>
+
+        <!-- First Panel -->
+        <div id="panel1">
+            <h2>Select Insurance Company:</h2>
+            <select id="insuranceCompany" onchange="showSecondPanel()">
+                <option value="">-- Select an Insurance Company --</option>
+                <option value="Anthem Blue Cross Blue Shield">Anthem Blue Cross Blue Shield</option>
+            </select>
+        </div>
+
+        <!-- Second Panel -->
+        <div id="panel2" class="panel">
+            <h2>Select Insurance Plan:</h2>
+            <select id="insurancePlan" onchange="showThirdPanel()">
+                <option value="">-- Select an Insurance Plan --</option>
+                <option value="Bronze Plan">Bronze Plan</option>
+                <option value="Silver Plan">Silver Plan</option>
+                <option value="Gold Plan">Gold Plan</option>
+            </select>
+        </div>
+
+        <!-- Third Panel -->
+        <div id="panel3" class="panel">
+            <h2>Does my insurance cover...</h2>
+            <input type="text" id="medicalIssue" placeholder="Enter your query" oninput="showSearchButton()">
+        </div>
+
+        <!-- Search Button -->
+        <div id="panel4" class="panel">
+            <button onclick="showChart()">Search</button>
+        </div>
+
+        <!-- Chart -->
+        <div id="chart" class="chart">
+            <h3>Coverage Information</h3>
+            <p id="coverageInfo">Here’s what we found based on your input:</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Ask-A-Duck Corporation</p>
+    </footer>
+
+    <script>
+        // Toggle Dark Mode
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Panels Logic
+        function showSecondPanel() {
+            const insuranceCompany = document.getElementById("insuranceCompany").value;
+            if (insuranceCompany) {
+                document.getElementById("panel2").style.display = "block";
+            } else {
+                hideAllPanels();
+            }
+        }
+
+        function showThirdPanel() {
+            const insurancePlan = document.getElementById("insurancePlan").value;
+            if (insurancePlan) {
+                document.getElementById("panel3").style.display = "block";
+            } else {
+                hidePanelsAfter(2);
+            }
+        }
+
+        function showSearchButton() {
+            const medicalIssue = document.getElementById("medicalIssue").value;
+            if (medicalIssue.trim() !== "") {
+                document.getElementById("panel4").style.display = "block";
+            } else {
+                hidePanelsAfter(3);
+            }
+        }
+
+        function showChart() {
+            const insuranceCompany = document.getElementById("insuranceCompany").value;
+            const insurancePlan = document.getElementById("insurancePlan").value;
+            const medicalIssue = document.getElementById("medicalIssue").value;
+
+            const userPays = insurancePlan === "Gold Plan" ? 0 : 20;
+            const insurancePays = insurancePlan === "Gold Plan" ? 100 : 80;
+
+            const coverageInfo = `
+                Insurance Company: ${insuranceCompany}<br>
+                Insurance Plan: ${insurancePlan}<br>
+                Query: ${medicalIssue}<br>
+                <strong>You Pay:</strong> $${userPays}<br>
+                <strong>Insurance Pays:</strong> $${insurancePays}
+            `;
+
+            document.getElementById("coverageInfo").innerHTML = coverageInfo;
+            document.getElementById("chart").style.display = "block";
+        }
+
+        function hideAllPanels() {
+            document.querySelectorAll('.panel').forEach(panel => panel.style.display = 'none');
+            document.getElementById("chart").style.display = "none";
+        }
+
+        function hidePanelsAfter(panelNumber) {
+            for (let i = panelNumber + 1; i <= 4; i++) {
+                document.getElementById(`panel${i}`).style.display = "none";
+            }
+            document.getElementById("chart").style.display = "none";
+        }
+    </script>
+</body>
+</html>
