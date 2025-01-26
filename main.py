@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, url_for
+from flask import Flask, request, jsonify, render_template
 from openai import OpenAI
 import pdfplumber
 import os
@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Set OpenAI API key (replace with your actual key or set it as an environment variable)
 client = OpenAI(
-    api_key="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"
+    api_key="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"
 )
 
 def extract_pdf_text(pdf_path):
@@ -35,45 +35,45 @@ def generate_text():
         if insurance_company == "Ambetter Health":
             match insurance_plan:
                 case "Bronze":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_bronze.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/ambetter_bronze.pdf"
                 case "Elite Bronze":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_elite_bronze.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/ambetter_elite_bronze.pdf"
                 case "Silver:":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_silver.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/ambetter_silver.pdf"
                 case "Elite Silver":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_elite_silver.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/ambetter_elite_silver.pdf"
                 case "Gold:":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_gold.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/ambetter_gold.pdf"
         elif insurance_company == "AvMed":
             match insurance_plan:
                 case "Bronze":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/avmed_bronze.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/avmed_bronze.pdf"
                 case "Silver":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/avmed_silver.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/avmed_silver.pdf"
                 case "Gold":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/avmed_gold.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/avmed_gold.pdf"
                 case "Platinum":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/avmed_platinum.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/avmed_platinum.pdf"
         elif insurance_company == "Florida Blue":
             match insurance_plan:
                 case "Bronze":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/flblue_bronze.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/flblue_bronze.pdf"
                 case "Silver":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/flblue_silver.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/flblue_silver.pdf"
                 case "Gold":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/flblue_gold.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/flblue_gold.pdf"
                 case "Platinum":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/flblue_platinum.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/flblue_platinum.pdf"
         elif insurance_company == "Oscar Insurance Company of Florida":
             match insurance_plan:
                 case "Bronze":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/oscar_bronze.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/oscar_bronze.pdf"
                 case "Silver":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/oscar_silver.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/oscar_silver.pdf"
                 case "Gold":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/oscar_gold.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/oscar_gold.pdf"
                 case "Gold Elite Saver Plus":
-                    pdf_path = "C:/Users/Hanlin/Documents/Summaries/oscar_gold_elite_saver_plus.pdf"
+                    pdf_path = "C:/Users/Rohan/Documents/Summaries/oscar_gold_elite_saver_plus.pdf"
 
         if not pdf_path or not os.path.exists(pdf_path):
             return jsonify({"error": "No corresponding PDF found for the selected plan."}), 400
@@ -101,11 +101,14 @@ def generate_text():
             messages=[
                 {"role": "system", "content": "You are made to help people decipher their insurance information, \
         including questions about cost of prescriptions and certain medical procedures. You will be given a PDF document of their coverage. You will answer \
-        the following questions per prompt: Is the patient's requested care covered by their insurance plan? \
+        the following questions per prompt based ONLY on the PDF: Is the patient's requested care covered by their insurance plan? \
         Does the patient have a deductible? If the patient does, does it need to be fulfilled before the patient can claim this benefit? \
-         Does the patient have an out of pocket max? If the patient is requesting to see a doctor, does the patient need a referral to see this doctor? \
-          Does the patient need to visit an in-network provider, if so, where can the patient find a list of in-network providers? \
-           Are there any complications to how the patient will receive carE if they use their insurance policy?"},
+        Does the patient have an out of pocket max? If the patient is requesting to see a doctor, does the patient need a referral to see this doctor? \
+        Does the patient need to visit an in-network provider, if so, where can the patient find a list of in-network providers? \
+        Are there any complications to how the patient will receive care if they use their insurance policy? HOWEVER, do not simply list each \
+        question and answer. Instead, consider these questions in relation to strictly ONLY what the query asks. For each query given, simply and briefly answer the \
+        questions in a tell format. Please keep the answer as concise as possible; if, for example, a certain question here is not necessary to answer the query, do not include it. \
+        List any relevant costs in number. Stay on topic; information about medicine is not needed if the query is about a surgery, and vice versa. Do not add an additional brief summary at the end of your answer."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=5000

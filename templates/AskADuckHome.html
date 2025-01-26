@@ -93,6 +93,25 @@
             padding: 10px;
             display: none;
         }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid black;
+            border-radius: 50%;
+            border-top: 2px solid transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
         button {
             cursor: pointer;
@@ -185,7 +204,9 @@
         <div id="panel4" class="panel">
             <button onclick="showChart()">Search</button>
         </div>
+        <div id="statusIndicator" style="display: none; text-align: center; margin: 20px 0;">
 
+        </div>
         <!-- Chart -->
         <div id="chart" class="chart">
             <h3>Coverage Information</h3>
@@ -246,16 +267,25 @@
     const payload = {
         insuranceCompany,
         insurancePlan,
-        medicalIssue
+        medicalIssue,
     };
+
+    // Show the "Generating" status
+    const statusContainer = document.getElementById("statusIndicator");
+    statusContainer.innerHTML = `
+        <span style="font-weight: bold; color: black; font-size: 24px;">Generating Response...</span>
+        <span class="spinner"></span>
+        `;
+
+    statusContainer.style.display = "block";
 
     // Send data to the backend
     fetch('/generate', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
     })
         .then(response => response.json())
         .then(data => {
@@ -268,12 +298,15 @@
                     Query: ${medicalIssue}<br>
                     <strong>Response:</strong> ${data.generated_text}
                 `;
-
                 document.getElementById("coverageInfo").innerHTML = coverageInfo;
                 document.getElementById("chart").style.display = "block";
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+            // Hide the "Generating" status
+            statusContainer.style.display = "none";
+        });
 }
 
         function hideAllPanels() {
