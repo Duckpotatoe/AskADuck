@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Set OpenAI API key (replace with your actual key or set it as an environment variable)
 client = OpenAI(
-    api_key="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"
+    api_key=""
 )
 
 def extract_pdf_text(pdf_path):
@@ -38,7 +38,7 @@ def generate_text():
                     pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_bronze.pdf"
                 case "Elite Bronze":
                     pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_elite_bronze.pdf"
-                case "Silver:":
+                case "Silver":
                     pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_silver.pdf"
                 case "Elite Silver":
                     pdf_path = "C:/Users/Hanlin/Documents/Summaries/ambetter_elite_silver.pdf"

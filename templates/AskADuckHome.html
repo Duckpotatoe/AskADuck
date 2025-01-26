@@ -15,19 +15,16 @@
         }
 
         .container {
-            text-align: center center;
+            text-align: center;
             width: 40vw;
-            margin:auto;
-            height: 38vw;
+            margin: auto;
             background-color: #f1f1f2;
             border-radius: 25px;
-            box-shadow: 
-            inset 2px 2px 5px rgba(0, 0, 0, 0.2), /* Inner shadow */
-
-            -2px -2px 5px rgba(255, 255, 255, 0.2); /* Outer shadow */
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), -2px -2px 5px rgba(255, 255, 255, 0.2);
+            padding: 20px; /* Added padding for spacing */
         }
 
-        header, footer {
+        header {
             background-color: lightblue;
             color: white;
             padding: 0px 20px;
@@ -39,11 +36,17 @@
             width: 100%;
             z-index: 10;
         }
-        
+
         footer {
-            padding: 20px 20px;
+            background-color: lightblue;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            position: relative; /* Ensures it flows with the document */
+            margin-top: 20px; /* Add space between footer and response box */
         }
-        
+
         header {
             top: 0;
         }
@@ -83,8 +86,13 @@
 
         main {
             text-align: center;
-            padding: 100px 20px 80px; /* Space for fixed header and footer */
+            padding: 20px; /* Adds space around the content */
+            margin-bottom: 20px; /* Prevents overlap with the footer */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
 
         h1, h2 {
             margin: 20px 0;
@@ -105,12 +113,37 @@
         .panel3 {
             width: 5000px;
         }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid black;
+            border-radius: 50%;
+            border-top: 2px solid transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
         .chart {
-            margin-top: 20px;
+            display: none; /* Hidden by default */
+            position: relative; /* Ensures it flows with the document */
+            margin: 20px auto; /* Adds space above and centers it */
+            padding: 20px; /* Adds space inside the box */
             border: 1px solid #ccc;
-            padding: 10px;
-            display: none;
+            background-color: #ffffff;
+            width: 90%; /* Makes it responsive */
+            max-width: 800px; /* Prevents it from becoming too wide */
+            border-radius: 15px;
+            font-size: 18px;
         }
 
         button {
@@ -194,7 +227,7 @@
                 <option  value = 'Bronze' data-tag='AvMed'>Bronze</option>
                 <option  value = 'Silver' data-tag='AvMed'>Silver</option>
                 <option  value = 'Gold' data-tag='AvMed'>Gold</option>
-                <option  value = 'Platnium' data-tag='AvMed'>Platinum</option>
+                <option  value = 'Platinum' data-tag='AvMed'>Platinum</option>
     
                 <option  value = 'Bronze' data-tag='Florida Blue'>Bronze</option>
                 <option  value = 'Silver' data-tag='Florida Blue'>Silver</option>
@@ -223,7 +256,9 @@
         <div id="panel4" class="panel">
             <button onclick="showChart()">Search</button>
         </div>
+        <div id="statusIndicator" style="display: none; text-align: center; margin: 20px 0;">
 
+        </div>
         <!-- Chart -->
         <div id="chart" class="chart">
             <h3>Coverage Information</h3>
@@ -285,16 +320,22 @@
     const payload = {
         insuranceCompany,
         insurancePlan,
-        medicalIssue
+        medicalIssue,
     };
 
-    // Send data to the backend
+    const statusContainer = document.getElementById("statusIndicator");
+    statusContainer.innerHTML = `
+        <span style="font-weight: bold; color: black; font-size: 24px;">Generating Response...</span>
+        <span class="spinner"></span>
+    `;
+    statusContainer.style.display = "block";
+
     fetch('/generate', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
     })
         .then(response => response.json())
         .then(data => {
@@ -307,12 +348,17 @@
                     Query: ${medicalIssue}<br>
                     <strong>Response:</strong> ${data.generated_text}
                 `;
-
                 document.getElementById("coverageInfo").innerHTML = coverageInfo;
                 document.getElementById("chart").style.display = "block";
+
+                // Scroll to the response box
+                document.getElementById("chart").scrollIntoView({ behavior: "smooth" });
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+            statusContainer.style.display = "none";
+        });
 }
 
         function hideAllPanels() {
