@@ -132,11 +132,16 @@
         <h1>Ask a Duck</h1>
 
         <!-- First Panel -->
+         <!--this helps the later script for selecting Insurance Plans, scroll to bottom to see more-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
         <div id="panel1">
             <h2>Select Insurance Company:</h2>
             <select id="insuranceCompany" onchange="showSecondPanel()">
                 <option value="">-- Select an Insurance Company --</option>
-                <option value="Anthem Blue Cross Blue Shield">Anthem Blue Cross Blue Shield</option>
+                <option value = 'Anthem Blue Cross'>Anthem Blue Cross</option>
+                <option value = 'Statefarm'>Statefarm</option>
+                <option value = 'Geico'>Geico</option>
             </select>
         </div>
 
@@ -144,10 +149,17 @@
         <div id="panel2" class="panel">
             <h2>Select Insurance Plan:</h2>
             <select id="insurancePlan" onchange="showThirdPanel()">
-                <option value="">-- Select an Insurance Plan --</option>
-                <option value="Bronze Plan">Bronze Plan</option>
-                <option value="Silver Plan">Silver Plan</option>
-                <option value="Gold Plan">Gold Plan</option>
+                <option  value = 'Anthem Blue Cross' data-tag='Anthem Blue Cross'>Bronze</option>
+                <option  value = 'Anthem Blue Cross' data-tag='Anthem Blue Cross'>Silver</option>
+                <option  value = 'Anthem Blue Cross' data-tag='Anthem Blue Cross'>Gold</option>
+    
+                <option  value = 'Statefarm' data-tag='Statefarm'>Term Life</option>
+                <option  value = 'Statefarm' data-tag='Statefarm'>Whole Life</option>
+                <option  value = 'Statefarm' data-tag='Statefarm'>Universal</option>
+    
+                <option  value = 'Geico' data-tag='Geico'>Term Life</option>
+                <option  value = 'Geico' data-tag='Geico'>Whole Life</option>
+                <option  value = 'Geico' data-tag='Geico'>Universal Life</option>
             </select>
         </div>
 
@@ -210,24 +222,47 @@
         }
 
         function showChart() {
-            const insuranceCompany = document.getElementById("insuranceCompany").value;
-            const insurancePlan = document.getElementById("insurancePlan").value;
-            const medicalIssue = document.getElementById("medicalIssue").value;
+    const insuranceCompany = document.getElementById("insuranceCompany").value;
+    const insurancePlan = document.getElementById("insurancePlan").value;
+    const medicalIssue = document.getElementById("medicalIssue").value;
 
-            const userPays = insurancePlan === "Gold Plan" ? 0 : 20;
-            const insurancePays = insurancePlan === "Gold Plan" ? 100 : 80;
+    if (!insuranceCompany || !insurancePlan || !medicalIssue) {
+        alert("Please fill out all fields!");
+        return;
+    }
 
-            const coverageInfo = `
-                Insurance Company: ${insuranceCompany}<br>
-                Insurance Plan: ${insurancePlan}<br>
-                Query: ${medicalIssue}<br>
-                <strong>You Pay:</strong> $${userPays}<br>
-                <strong>Insurance Pays:</strong> $${insurancePays}
-            `;
+    const payload = {
+        insuranceCompany,
+        insurancePlan,
+        medicalIssue
+    };
 
-            document.getElementById("coverageInfo").innerHTML = coverageInfo;
-            document.getElementById("chart").style.display = "block";
-        }
+    // Send data to the backend
+    fetch('http://127.0.0.1:5000/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(`Error: ${data.error}`);
+            } else {
+                const coverageInfo = `
+                    Insurance Company: ${insuranceCompany}<br>
+                    Insurance Plan: ${insurancePlan}<br>
+                    Query: ${medicalIssue}<br>
+                    <strong>Response:</strong> ${data.generated_text}
+                `;
+
+                document.getElementById("coverageInfo").innerHTML = coverageInfo;
+                document.getElementById("chart").style.display = "block";
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
 
         function hideAllPanels() {
             document.querySelectorAll('.panel').forEach(panel => panel.style.display = 'none');
@@ -240,6 +275,25 @@
             }
             document.getElementById("chart").style.display = "none";
         }
+    </script>
+    <!--this creates the script in order to show more options for each individual Insurance Company-->
+    <script>
+        $('#insuranceCompany').on('change', function() {
+            var selected = $(this).val();
+            $("#insurancePlan option").each(function(item){
+                console.log(selected) ;  
+                var element =  $(this) ; 
+                console.log(element.data("tag")) ; 
+                if (element.data("tag") != selected){
+                    element.hide() ; 
+                }else{
+                    element.show();
+                }
+            }) ; 
+            
+            $("#insurancePlan").val($("#insurancePlan option:visible:first").val());
+            
+    });
     </script>
 </body>
 </html>
