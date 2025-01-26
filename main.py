@@ -75,13 +75,6 @@ def generate_text():
                 case "Gold Elite Saver Plus":
                     pdf_path = "C:/Users/Hanlin/Documents/Summaries/oscar_gold_elite_saver_plus.pdf"
 
-        print("lol")
-        print(data)
-        print(insurance_company)
-        print(insurance_plan)
-        print(medical_issue)
-        print(pdf_path)
-
         if not pdf_path or not os.path.exists(pdf_path):
             return jsonify({"error": "No corresponding PDF found for the selected plan."}), 400
 
@@ -102,36 +95,29 @@ def generate_text():
                   f"Here is the query: {medical_issue}\n\n"
                   f"Please answer the user's query based on their insurance company and plan.")
 
-        # # Call OpenAI ChatCompletion API
-        # response = client.chat.completions.create(
-        #     model="gpt-4o-mini",
-        #     messages=[
-        #         {"role": "system", "content": "You are made to help people decipher their insurance information, \
-        # including questions about cost of prescriptions and certain medical procedures. You will be given a PDF document of their coverage. You will answer \
-        # the following questions per prompt: Is the patient's requested care covered by their insurance plan? \
-        # Does the patient have a deductible? If the patient does, does it need to be fulfilled before the patient can claim this benefit? \
-        #  Does the patient have an out of pocket max? If the patient is requesting to see a doctor, does the patient need a referral to see this doctor? \
-        #   Does the patient need to visit an in-network provider, if so, where can the patient find a list of in-network providers? \
-        #    Are there any complications to how the patient will receive carE if they use their insurance policy?"},
-        #         {"role": "user", "content": prompt}
-        #     ],
-        #     max_tokens=150
-        # )
+        # Call OpenAI ChatCompletion API
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are made to help people decipher their insurance information, \
+        including questions about cost of prescriptions and certain medical procedures. You will be given a PDF document of their coverage. You will answer \
+        the following questions per prompt: Is the patient's requested care covered by their insurance plan? \
+        Does the patient have a deductible? If the patient does, does it need to be fulfilled before the patient can claim this benefit? \
+         Does the patient have an out of pocket max? If the patient is requesting to see a doctor, does the patient need a referral to see this doctor? \
+          Does the patient need to visit an in-network provider, if so, where can the patient find a list of in-network providers? \
+           Are there any complications to how the patient will receive carE if they use their insurance policy?"},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=5000
+        )
 
-        # # Extract the generated text
-        # generated_text = response.choices[0].message.content
-        # print("Gen:")
-        # print(generated_text)
+        # Extract the generated text
+        generated_text = response.choices[0].message.content
+        print("Gen:")
+        print(generated_text)
         
-        # # Return the result
-        # return jsonify({"generated_text": generated_text})
-        print("Got to end")
-        print(data)
-        print(insurance_company)
-        print(insurance_plan)
-        print(medical_issue)
-        print(pdf_path)
-        return "test"
+        # Return the result
+        return jsonify({"generated_text": generated_text})
 
     except Exception as e:
         print(f"Error: {str(e)}")
