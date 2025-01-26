@@ -81,10 +81,11 @@
             left: 0;
             right: 0;
             z-index: 1;
-            display: block;
+            display: initial;
             background-image: url('stockphotos.jpg');
             width: 100%;
             height: 100%;
+            background-position: center center;
             -webkit-filter: blur(5px);
             -moz-filter: blur(5px);
             -o-filter: blur(5px);
@@ -186,8 +187,8 @@
     <!-- Header -->
     <header>
         <nav>
-            <a href="{{url_for('templates', filename='AskADuckHome.html')}}">Home</a>
-            <a href="{{url_for('templates', filename='AskADuckAbout.html')}}">About Us       </a>
+            <a href="{{ url_for('AskADuckHome') }}">Home</a>
+            <a href="{{ url_for('AskADuckAbout') }}">About Us       </a>
         </nav>
         <nav>
             <b> <img src="{{url_for('static', filename='askaduck.png')}}" alt="AskaDuck Logo" style="width:70px;height:70px;"></b>
@@ -214,6 +215,9 @@
         <h2>Tools utilized:</h2>
         <ul>
             <li>Chat GPT</li>
+            <li>Stack Overflow</li>
+            <li>W3Schools</li>
+            <li>Medium</li>
         </ul>
         </div>
     </main>
