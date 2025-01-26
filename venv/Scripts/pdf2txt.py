@@ -1,4 +1,4 @@
-#!C:\Users\1stdu\OneDrive\Desktop\Jacobs Folder\School\Coding\SwampHacks\GIthub\AskADuck\venv\Scripts\python.exe
+#!C:\Users\Hanlin\Documents\GitHub\AskADuck\venv\Scripts\python.exe
 """A command line tool for extracting text and images from PDF and
 output it to plain text, html, xml or tags."""
 import argparse
