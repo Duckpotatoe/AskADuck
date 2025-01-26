@@ -118,11 +118,11 @@
     <!-- Header -->
     <header>
         <nav>
-            <a href="C:\Users\1stdu\OneDrive\Desktop\Jacobs Folder\School\Coding\SwampHacks\GIthub\AskADuck\AskADuckHome.html">Home</a>
-            <a href="C:\Users\1stdu\OneDrive\Desktop\Jacobs Folder\School\Coding\SwampHacks\GIthub\AskADuck\AskADuckAbout.html">About Us       </a>
+            <a>Home</a>
+            <a href="/about">About Us</a>
         </nav>
         <nav>
-            <b href="C:\Users\1stdu\OneDrive\Desktop\Jacobs Folder\School\Coding\SwampHacks\GIthub\AskADuck\AskADuckHome.html"> <img src="askaduck.png" alt="AskaDuck Logo" style="width:70px;height:70px;"></b>
+            <b href="C:\Users\1stdu\OneDrive\Desktop\Jacobs Folder\School\Coding\SwampHacks\GIthub\AskADuck\AskADuckHome.html"> <img src="{{url_for('static', filename='askaduck.png')}}" alt="AskaDuck Logo" style="width:70px;height:70px;"></b>
         </nav>
         <button id="darkModeToggle">🌙</button>
     </header>
@@ -150,26 +150,26 @@
         <div id="panel2" class="panel">
             <h2>Select Insurance Plan:</h2>
             <select id="insurancePlan" onchange="showThirdPanel()">
-                <option  value = 'Ambetter Health' data-tag='Ambetter Health'>Bronze</option>
-                <option  value = 'Ambetter Health' data-tag='Ambetter Health'>Elite Bronze</option>
-                <option  value = 'Ambetter Health' data-tag='Ambetter Health'>Silver</option>
-                <option  value = 'Ambetter Health' data-tag='Ambetter Health'>Elite Silver</option>
-                <option  value = 'Ambetter Health' data-tag='Ambetter Health'>Gold</option>
+                <option  value = 'Bronze' data-tag='Ambetter Health'>Bronze</option>
+                <option  value = 'Elite Bronze' data-tag='Ambetter Health'>Elite Bronze</option>
+                <option  value = 'Silver' data-tag='Ambetter Health'>Silver</option>
+                <option  value = 'Elite Silver' data-tag='Ambetter Health'>Elite Silver</option>
+                <option  value = 'Gold' data-tag='Ambetter Health'>Gold</option>
     
-                <option  value = 'AvMed' data-tag='AvMed'>Bronze</option>
-                <option  value = 'AvMed' data-tag='AvMed'>Silver</option>
-                <option  value = 'AvMed' data-tag='AvMed'>Gold</option>
-                <option  value = 'AvMed' data-tag='AvMed'>Platinum</option>
+                <option  value = 'Bronze' data-tag='AvMed'>Bronze</option>
+                <option  value = 'Silver' data-tag='AvMed'>Silver</option>
+                <option  value = 'Gold' data-tag='AvMed'>Gold</option>
+                <option  value = 'Platnium' data-tag='AvMed'>Platinum</option>
     
-                <option  value = 'Florida Blue' data-tag='Florida Blue'>Bronze</option>
-                <option  value = 'Florida Blue' data-tag='Florida Blue'>Silver</option>
-                <option  value = 'Florida Blue' data-tag='Florida Blue'>Gold</option>
-                <option  value = 'Florida Blue' data-tag='Florida Blue'>Platinum</option>
+                <option  value = 'Bronze' data-tag='Florida Blue'>Bronze</option>
+                <option  value = 'Silver' data-tag='Florida Blue'>Silver</option>
+                <option  value = 'Gold' data-tag='Florida Blue'>Gold</option>
+                <option  value = 'Platinum' data-tag='Florida Blue'>Platinum</option>
 
-                <option value = 'Oscar Insurance Company of Florida' data-tag="Oscar Insurance Company of Florida">Bronze</option>
-                <option value = 'Oscar Insurance Company of Florida' data-tag="Oscar Insurance Company of Florida">Silver</option>
-                <option value = 'Oscar Insurance Company of Florida' data-tag="Oscar Insurance Company of Florida">Gold</option>
-                <option value = 'Oscar Insurance Company of Florida' data-tag="Oscar Insurance Company of Florida">Gold Elite Saver Plus</option>
+                <option value = 'Bronze' data-tag="Oscar Insurance Company of Florida">Bronze</option>
+                <option value = 'Silver' data-tag="Oscar Insurance Company of Florida">Silver</option>
+                <option value = 'Gold' data-tag="Oscar Insurance Company of Florida">Gold</option>
+                <option value = 'Gold Elite Saver Plus' data-tag="Oscar Insurance Company of Florida">Gold Elite Saver Plus</option>
 
 
             </select>
@@ -250,7 +250,7 @@
     };
 
     // Send data to the backend
-    fetch('http://127.0.0.1:5000/generate', {
+    fetch('/generate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
