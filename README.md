@@ -3,6 +3,8 @@ Submission for Swamphacks X by Rohan Bisht, Jacob Delgado, Hanlin Zhang
 
 "Ask a Duck!" simplifies healthcare navigation. Users select their healthcare plan and describe the coverage or treatment they’re seeking. The "Duck" then reads their specific plan's coverage and benefits declaration, providing a clear answer on whether the care is covered and outlining any steps needed to access that coverage.
 
+See demo video @ https://youtu.be/Y3pVRUF4ZCI
+
 ## Installation Instructions
 1. Install Python 3
 2. Download and extract the project
